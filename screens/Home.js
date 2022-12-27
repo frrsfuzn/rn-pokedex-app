@@ -10,7 +10,8 @@ import {
 } from "react-native";
 
 function Home({ navigation }) {
-  const { data, isLoading, isError } = useFetchAllPokemon();
+  const { data, isLoading, isError, hasNextPage, fetchNextPage } =
+    useFetchAllPokemon();
   const pokemonItem = ({ item }) => {
     return (
       <TouchableOpacity
@@ -22,18 +23,23 @@ function Home({ navigation }) {
       </TouchableOpacity>
     );
   };
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
+
+  const loadMore = () => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  };
   return (
     <View style={styles.container}>
       <Text>Pokedex App</Text>
       <FlatList
-        data={data.results}
+        data={data?.pages.map((page) => page.results).flat()}
         renderItem={pokemonItem}
         keyExtractor={(result) => result.name}
         style={styles.pokemonList}
+        onEndReached={loadMore}
       />
+      {isLoading ? <Text>Loading...</Text> : null}
     </View>
   );
 }
