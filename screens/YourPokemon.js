@@ -15,16 +15,17 @@ import { AuthContext } from "../contexts/AuthContext";
 
 function YourPokemon({ navigation }) {
   const [myPokemon, setMyPokemon] = useState([]);
-  const {signOut, state} = useContext(AuthContext);
+  const {signOut, state, getUser} = useContext(AuthContext);
+  const user = getUser();
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
       const getData = async () => {
         try {
           const jsonValue = await AsyncStorage.getItem("myPokemon");
-          const data = jsonValue != null ? JSON.parse(jsonValue) : [];
+          const data = jsonValue != null ? JSON.parse(jsonValue) : {};
           if (isActive) {
-            setMyPokemon(data);
+            setMyPokemon(data[user.email]);
           }
         } catch (e) {
           console.log("error get data", e);

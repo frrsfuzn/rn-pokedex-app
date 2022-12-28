@@ -103,6 +103,7 @@ const AuthContextProvider = (props) => {
       }
     },
     signOut: () => dispatch({ type: "SIGN_OUT" }),
+    getUser: () => state.user,
     state,
   };
   return (
