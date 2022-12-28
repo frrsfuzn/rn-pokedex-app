@@ -13,6 +13,7 @@ const GetPokemonStack = createNativeStackNavigator();
 const YourPokemonStackScreens = () => (
   <YourPokemonStack.Navigator>
     <YourPokemonStack.Screen name="YourPokemon" component={YourPokemon} />
+    <YourPokemonStack.Screen name="Details" component={PokemonDetails} />
   </YourPokemonStack.Navigator>
 );
 
@@ -36,7 +37,7 @@ export const Main = () => (
     <Tab.Screen
       name="YourPokemonStack"
       component={YourPokemonStackScreens}
-      options={{ tabBarLabel: "Pokemon Library" }}
+      options={{ tabBarLabel: "Your Pokemon" }}
     />
     <Tab.Screen
       name="PokemonLibraryStack"

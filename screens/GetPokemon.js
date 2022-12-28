@@ -1,7 +1,8 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Button, Text, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import useFetchPokemon from "../Hooks/useFetchPokemon";
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 function GetPokemon() {
   const [pokemonNumber, setPokemonNumber] = useState(null);
@@ -17,6 +18,38 @@ function GetPokemon() {
       };
     }, [])
   );
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('myPokemon')
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+      } catch(e) {
+        console.log('error get data', e)
+      }
+    }
+    const storeData = async (value) => {
+      try {
+        const jsonValue = JSON.stringify(value)
+        await AsyncStorage.setItem('myPokemon', jsonValue)
+      } catch (e) {
+        console.log('error save data', e)
+      }
+    }
+    const savePokemon = async (pokemonName) => {
+      const myPokemon = await getData()
+      if(myPokemon){
+        const newData = {name: pokemonName}
+        myPokemon.push(newData)
+        await storeData(myPokemon)
+      }else{
+        const newPokemonData = [{name: pokemonName}]
+        await storeData(newPokemonData)        
+      }
+    }
+    if(!isLoading && pokemonNumber){
+      savePokemon(data.name)
+    }
+  }, [isLoading, pokemonNumber])
   const handleGetRandomPokemon = () => {
     const random = Math.floor(Math.random() * 800);
     setPokemonNumber(random);

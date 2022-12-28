@@ -1,8 +1,49 @@
-import React from "react";
-import { View, Text, SafeAreaView } from "react-native";
+import React, { useCallback, useState } from "react";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import { WebView } from "react-native-webview";
+import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-function YourPokemon() {
+function YourPokemon({ navigation }) {
+  const [myPokemon, setMyPokemon] = useState([]);
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+      const getData = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem("myPokemon");
+          const data = jsonValue != null ? JSON.parse(jsonValue) : [];
+          if (isActive) {
+            setMyPokemon(data);
+          }
+        } catch (e) {
+          console.log("error get data", e);
+        }
+      };
+      getData();
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
+  const pokemonItem = ({ item }) => {
+    return (
+      <TouchableOpacity
+        onPress={() => navigation.push("Details", { name: item.name })}
+        key={item.name}
+        style={styles.pokemon}
+      >
+        <Text>{item.name}</Text>
+      </TouchableOpacity>
+    );
+  };
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ height: 200, backgroundColor: "white" }}>
@@ -11,11 +52,39 @@ function YourPokemon() {
           source={{
             html: '<a class="twitter-timeline" href="https://twitter.com/Pokemon?ref_src=twsrc%5Etfw">Tweets by Pokemon</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> ',
           }}
+          // solution from https://github.com/react-navigation/react-navigation/issues/10290#issuecomment-1328353073
+          // somehow it fixed the crash if we add custom opacity
+          style={{ opacity: 0.99 }}
         />
       </View>
-      <Text>Your Pokemon</Text>
+      <View>
+        <Text>Your Pokemon</Text>
+        <FlatList
+          data={myPokemon}
+          renderItem={pokemonItem}
+          keyExtractor={(result) => result.name}
+          style={styles.pokemonList}
+        />
+      </View>
     </SafeAreaView>
   );
 }
 
 export default YourPokemon;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  pokemonList: {
+    width: "100%",
+  },
+  pokemon: {
+    backgroundColor: "#afa",
+    width: "100%",
+    padding: 10,
+  },
+});

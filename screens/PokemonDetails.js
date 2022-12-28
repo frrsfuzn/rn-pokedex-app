@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Text, View } from "react-native";
 import useFetchPokemon from "../Hooks/useFetchPokemon";
 
-function Details({ navigation, route }) {
+function Details({ route }) {
   const { name } = route.params;
   const { data, isLoading, isError } = useFetchPokemon(name);
   if (isLoading) {

@@ -1,7 +1,6 @@
 import React from "react";
 import useFetchAllPokemon from "../Hooks/useFetchAllPokemon";
 import {
-  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -21,7 +20,7 @@ function Home({ navigation }) {
   const pokemonItem = ({ item }) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate("Details", { name: item.name })}
+        onPress={() => navigation.push("Details", { name: item.name })}
         key={item.name}
         style={styles.pokemon}
       >
