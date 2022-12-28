@@ -10,28 +10,26 @@ import {
 } from "react-native";
 import { WebView } from "react-native-webview";
 import { useFocusEffect } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useAsyncStorage} from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../contexts/AuthContext";
 
 function YourPokemon({ navigation }) {
   const [myPokemon, setMyPokemon] = useState([]);
   const {signOut, state, getUser} = useContext(AuthContext);
   const user = getUser();
+  const {getItem} = useAsyncStorage("myPokemon")
+
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
-      const getData = async () => {
-        try {
-          const jsonValue = await AsyncStorage.getItem("myPokemon");
-          const data = jsonValue != null ? JSON.parse(jsonValue) : {};
-          if (isActive) {
-            setMyPokemon(data[user.email]);
-          }
-        } catch (e) {
-          console.log("error get data", e);
+      getItem()
+      .then(res => {
+        if(isActive && res){
+          const data = JSON.parse(res)
+          setMyPokemon(data[user.email])
         }
-      };
-      getData();
+      })
+      .catch(err => console.log(err))
       return () => {
         isActive = false;
       };

@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 export const AuthContext = createContext();
 
@@ -46,36 +46,22 @@ const AuthContextProvider = (props) => {
     user: null,
     error: null,
   });
+  const { getItem, setItem } = useAsyncStorage("Users");
 
   useEffect(() => {
     const definedUser = [
       { name: "Farras", email: "farras@email.com", password: "123123" },
       { name: "Anya", email: "anya@email.com", password: "321321" },
     ];
-    const storeData = async (value) => {
-      try {
-        const jsonValue = JSON.stringify(value);
-        await AsyncStorage.setItem("Users", jsonValue);
-      } catch (e) {
-        // saving error
-        console.log("error while saving defined user", e);
-      }
-    };
 
-    const getData = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem("Users");
-        if (!jsonValue) {
-          storeData(definedUser);
-        } else {
-          console.log("defined user exists");
-        }
-      } catch (e) {
-        // error reading value
-        console.log("error while getting defined users", e);
+    const saveDefinedUsers = async () => {
+      const jsonValue = await getItem();
+      if (!jsonValue) {
+        const data = JSON.stringify(definedUser);
+        await setItem(data);
       }
     };
-    getData();
+    saveDefinedUsers();
   }, []);
 
   const authContext = {
@@ -91,7 +77,7 @@ const AuthContextProvider = (props) => {
           });
           return;
         }
-        const jsonValue = await AsyncStorage.getItem("Users");
+        const jsonValue = await getItem();
         const users = jsonValue != null ? JSON.parse(jsonValue) : null;
         if (users) {
           let found = false;
@@ -121,7 +107,7 @@ const AuthContextProvider = (props) => {
           });
           return;
         }
-        const jsonValue = await AsyncStorage.getItem("Users");
+        const jsonValue = await getItem();
         const users = jsonValue != null ? JSON.parse(jsonValue) : [];
         if (users) {
           let emailExist = false;
@@ -138,8 +124,8 @@ const AuthContextProvider = (props) => {
             const user = { name, email, password };
             users.push(user);
             const jsonValue = JSON.stringify(users);
-            await AsyncStorage.setItem("Users", jsonValue);
-            dispatch({ type: "SIGN_UP", user: {...user} });
+            await setItem(jsonValue);
+            dispatch({ type: "SIGN_UP", user: { ...user } });
           }
         }
       } catch (e) {

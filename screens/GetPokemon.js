@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useContext } from "react";
 import { Button, Text, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import useFetchPokemon from "../hooks/useFetchPokemon";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../contexts/AuthContext";
 
 function GetPokemon() {
@@ -10,6 +10,7 @@ function GetPokemon() {
   const { getUser } = useContext(AuthContext);
   const user = getUser();
   const { data, isLoading } = useFetchPokemon(pokemonNumber, !!pokemonNumber);
+  const { getItem, setItem } = useAsyncStorage("myPokemon");
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
@@ -22,35 +23,22 @@ function GetPokemon() {
     }, [])
   );
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem("myPokemon");
-        return jsonValue != null ? JSON.parse(jsonValue) : null;
-      } catch (e) {
-        console.log("error get data", e);
-      }
-    };
-    const storeData = async (value) => {
-      try {
-        const jsonValue = JSON.stringify(value);
-        await AsyncStorage.setItem("myPokemon", jsonValue);
-      } catch (e) {
-        console.log("error save data", e);
-      }
-    };
     const savePokemon = async (pokemonName) => {
-      let myPokemon = await getData();
+      let myPokemon = await getItem();
       if (myPokemon) {
+        myPokemon = JSON.parse(myPokemon);
         const newData = { name: pokemonName };
         if (myPokemon[user.email]) {
           myPokemon[user.email].push(newData);
         } else {
           myPokemon = { ...myPokemon, [user.email]: [{ name: pokemonName }] };
         }
-        await storeData(myPokemon);
+        const jsonValue = JSON.stringify(myPokemon);
+        await setItem(jsonValue);
       } else {
         const newPokemonData = { [user.email]: [{ name: pokemonName }] };
-        await storeData(newPokemonData);
+        const jsonValue = JSON.stringify(newPokemonData);
+        await setItem(jsonValue);
       }
     };
     if (!isLoading && pokemonNumber && user) {
