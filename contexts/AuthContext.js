@@ -17,6 +17,13 @@ const authReducer = (prevState, action) => {
         user: action.user,
         error: null,
       };
+    case "SIGN_UP":
+      return {
+        ...prevState,
+        isSignout: false,
+        user: action.user,
+        error: null,
+      };
     case "SIGN_OUT":
       return {
         ...prevState,
@@ -96,6 +103,43 @@ const AuthContextProvider = (props) => {
           });
           if (!found) {
             dispatch({ type: "ERROR", value: "Email or password incorrect" });
+          }
+        }
+      } catch (e) {
+        console.log("error while signin", e);
+      }
+    },
+    signUp: async (name, email, password) => {
+      console.log("signUp");
+
+      try {
+        dispatch({ type: "ON_SIGN_IN" });
+        if (name === "" || email === "" || password === "") {
+          dispatch({
+            type: "ERROR",
+            value: "Name, email or password cannot be empty",
+          });
+          return;
+        }
+        const jsonValue = await AsyncStorage.getItem("Users");
+        const users = jsonValue != null ? JSON.parse(jsonValue) : [];
+        if (users) {
+          let emailExist = false;
+          users.forEach((user) => {
+            if (user.email === email) {
+              emailExist = true;
+              dispatch({
+                type: "ERROR",
+                value: "Email already used, use another email!",
+              });
+            }
+          });
+          if (!emailExist) {
+            const user = { name, email, password };
+            users.push(user);
+            const jsonValue = JSON.stringify(users);
+            await AsyncStorage.setItem("Users", jsonValue);
+            dispatch({ type: "SIGN_UP", user: {...user} });
           }
         }
       } catch (e) {

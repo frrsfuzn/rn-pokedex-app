@@ -9,6 +9,7 @@ import PokemonDetails from "../screens/PokemonDetails";
 import GetPokemon from "../screens/GetPokemon";
 import YourPokemon from "../screens/YourPokemon";
 import Login from "../screens/Login";
+import Register from "../screens/Register";
 
 const YourPokemonStack = createNativeStackNavigator();
 const PokemonLibraryStack = createNativeStackNavigator();
@@ -61,6 +62,7 @@ const MainStackScreens = () => (
 const AuthenticationStackScreens = () => (
   <AuthenticationStack.Navigator>
     <AuthenticationStack.Screen name="Login" component={Login} />
+    <AuthenticationStack.Screen name="Register" component={Register} />
   </AuthenticationStack.Navigator>
 );
 
