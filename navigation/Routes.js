@@ -10,6 +10,7 @@ import GetPokemon from "../screens/GetPokemon";
 import YourPokemon from "../screens/YourPokemon";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
+import LoadingSplash from "../screens/LoadingSplash";
 
 const YourPokemonStack = createNativeStackNavigator();
 const PokemonLibraryStack = createNativeStackNavigator();
@@ -69,18 +70,20 @@ const AuthenticationStackScreens = () => (
 const isLogin = false;
 
 export const Routes = () => {
-  const {state} = useContext(AuthContext)
-  console.log(state)
+  const { state } = useContext(AuthContext);
+  console.log(state);
   return (
     <AppStack.Navigator screenOptions={{ headerShown: false }}>
-      {state.user !== null ? (
+      {state.isLoading ? (
+        <AppStack.Screen name="LoadingSplash" component={LoadingSplash} />
+      ) : state.user !== null ? (
         <AppStack.Screen name="MainScreens" component={MainStackScreens} />
       ) : (
         <AppStack.Screen
           name="AuthenticationScreens"
           component={AuthenticationStackScreens}
           options={{
-            animationTypeForReplace: state.isSignout ? 'pop' : 'push',
+            animationTypeForReplace: state.isSignout ? "pop" : "push",
           }}
         />
       )}

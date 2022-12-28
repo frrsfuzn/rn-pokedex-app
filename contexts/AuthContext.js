@@ -5,6 +5,12 @@ export const AuthContext = createContext();
 
 const authReducer = (prevState, action) => {
   switch (action.type) {
+    case "RESTORE_USER":
+      return {
+        ...prevState,
+        isLoading: false,
+        user: action.user,
+      };
     case "ON_SIGN_IN":
       return {
         ...prevState,
@@ -47,6 +53,11 @@ const AuthContextProvider = (props) => {
     error: null,
   });
   const { getItem, setItem } = useAsyncStorage("Users");
+  const {
+    getItem: getLoggedUser,
+    setItem: setLoggedUser,
+    removeItem: removeLoggedUser,
+  } = useAsyncStorage("LoggedUser");
 
   useEffect(() => {
     const definedUser = [
@@ -61,7 +72,17 @@ const AuthContextProvider = (props) => {
         await setItem(data);
       }
     };
+
+    const checkLoggedUser = async () => {
+      const loggedUser = await getLoggedUser();
+      console.log("loggedUser", loggedUser);
+      if (loggedUser) {
+        const user = JSON.parse(loggedUser);
+        dispatch({ type: "RESTORE_USER", user });
+      }
+    };
     saveDefinedUsers();
+    checkLoggedUser();
   }, []);
 
   const authContext = {
@@ -84,7 +105,10 @@ const AuthContextProvider = (props) => {
           users.forEach((user) => {
             if (user.email === email && user.password === password) {
               found = true;
-              dispatch({ type: "SIGN_IN", user: { ...user } });
+              const loggedUser = JSON.stringify(user);
+              setLoggedUser(loggedUser).then(() => {
+                dispatch({ type: "SIGN_IN", user: { ...user } });
+              });
             }
           });
           if (!found) {
@@ -122,6 +146,8 @@ const AuthContextProvider = (props) => {
           });
           if (!emailExist) {
             const user = { name, email, password };
+            const loggedUser = JSON.stringify(user);
+            await setLoggedUser(loggedUser);
             users.push(user);
             const jsonValue = JSON.stringify(users);
             await setItem(jsonValue);
@@ -132,7 +158,10 @@ const AuthContextProvider = (props) => {
         console.log("error while signin", e);
       }
     },
-    signOut: () => dispatch({ type: "SIGN_OUT" }),
+    signOut: async () => {
+      await removeLoggedUser();
+      dispatch({ type: "SIGN_OUT" });
+    },
     getUser: () => state.user,
     state,
   };
