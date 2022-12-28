@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Button, Text, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import useFetchPokemon from "../Hooks/useFetchPokemon";
+import useFetchPokemon from "../hooks/useFetchPokemon";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 function GetPokemon() {

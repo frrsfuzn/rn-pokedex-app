@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Text, View } from "react-native";
-import useFetchPokemon from "../Hooks/useFetchPokemon";
+import useFetchPokemon from "../hooks/useFetchPokemon";
 
 function Details({ route }) {
   const { name } = route.params;

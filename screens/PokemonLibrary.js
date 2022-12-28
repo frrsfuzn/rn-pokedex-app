@@ -1,5 +1,5 @@
 import React from "react";
-import useFetchAllPokemon from "../Hooks/useFetchAllPokemon";
+import useFetchAllPokemon from "../hooks/useFetchAllPokemon";
 import {
   FlatList,
   StyleSheet,

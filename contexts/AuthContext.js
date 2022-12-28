@@ -5,6 +5,11 @@ export const AuthContext = createContext();
 
 const authReducer = (prevState, action) => {
   switch (action.type) {
+    case "ON_SIGN_IN":
+      return {
+        ...prevState,
+        error: null,
+      };
     case "SIGN_IN":
       return {
         ...prevState,
@@ -19,10 +24,10 @@ const authReducer = (prevState, action) => {
         user: null,
         error: null,
       };
-    case "USER_NOT_FOUND":
+    case "ERROR":
       return {
         ...prevState,
-        error: "Email or password incorrect",
+        error: `Error: ${action.value}`,
       };
   }
 };
@@ -46,16 +51,39 @@ const AuthContextProvider = (props) => {
         await AsyncStorage.setItem("Users", jsonValue);
       } catch (e) {
         // saving error
-        console.log("error while saving defined user");
+        console.log("error while saving defined user", e);
       }
     };
-    storeData(definedUser);
+
+    const getData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem("Users");
+        if (!jsonValue) {
+          storeData(definedUser);
+        } else {
+          console.log("defined user exists");
+        }
+      } catch (e) {
+        // error reading value
+        console.log("error while getting defined users", e);
+      }
+    };
+    getData();
   }, []);
 
   const authContext = {
     signIn: async (email, password) => {
       console.log("signIn");
+
       try {
+        dispatch({ type: "ON_SIGN_IN" });
+        if (email === "" || password === "") {
+          dispatch({
+            type: "ERROR",
+            value: "Email or password cannot be empty",
+          });
+          return;
+        }
         const jsonValue = await AsyncStorage.getItem("Users");
         const users = jsonValue != null ? JSON.parse(jsonValue) : null;
         if (users) {
@@ -67,7 +95,7 @@ const AuthContextProvider = (props) => {
             }
           });
           if (!found) {
-            dispatch({ type: "USER_NOT_FOUND" });
+            dispatch({ type: "ERROR", value: "Email or password incorrect" });
           }
         }
       } catch (e) {
