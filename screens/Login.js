@@ -13,6 +13,7 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigation } from "@react-navigation/native";
 import BevelButton from "../components/BevelButton";
+import CustomInput from "../components/CustomInput";
 
 const Login = () => {
   const { signIn, state } = useContext(AuthContext);
@@ -26,13 +27,13 @@ const Login = () => {
     <SafeAreaView style={styles.container}>
       <Text>Welcome to Pokedex!</Text>
       <View style={styles.form}>
-        <TextInput
+        <CustomInput
           value={formQuery.email}
           onChangeText={(text) => handleChange("email", text)}
           placeholder="Email"
           style={styles.textInput}
         />
-        <TextInput
+        <CustomInput
           secureTextEntry={true}
           value={formQuery.password}
           onChangeText={(text) => handleChange("password", text)}
@@ -43,7 +44,7 @@ const Login = () => {
         <BevelButton
           title="Sign In"
           onPress={() => signIn(formQuery.email, formQuery.password)}
-          style={styles.button}
+          containerStyle={styles.button}
         />
         <View style={styles.footer}>
           <Text>Doesn't have an account? </Text>
@@ -70,12 +71,11 @@ const styles = StyleSheet.create({
     // backgroundColor: 'salmon'
   },
   button: {
-    marginTop: 10,
+    marginTop: 15,
+    marginBottom: 10,
   },
   textInput: {
-    borderBottomWidth: 1,
-    borderColor: "#aaa",
-    marginBottom: 20,
+    marginBottom: 10,
   },
   register: {
     color: "#678983",
