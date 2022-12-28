@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import {
   View,
   Text,
@@ -6,13 +6,16 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
+  Button,
 } from "react-native";
 import { WebView } from "react-native-webview";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "../contexts/AuthContext";
 
 function YourPokemon({ navigation }) {
   const [myPokemon, setMyPokemon] = useState([]);
+  const {signOut, state} = useContext(AuthContext);
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
@@ -47,6 +50,8 @@ function YourPokemon({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ height: 200, backgroundColor: "white" }}>
+        <Text>Hi, {state.user.name}!</Text>
+        <Button title="SignOut" onPress={signOut}/>
         <Text>Pokemon's Twitter</Text>
         <WebView
           source={{

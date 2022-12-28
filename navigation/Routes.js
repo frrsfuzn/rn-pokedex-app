@@ -1,14 +1,22 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useContext } from "react";
+
+import { AuthContext } from "../contexts/AuthContext";
 
 import PokemonLibrary from "../screens/PokemonLibrary";
 import PokemonDetails from "../screens/PokemonDetails";
 import GetPokemon from "../screens/GetPokemon";
 import YourPokemon from "../screens/YourPokemon";
+import Login from "../screens/Login";
 
 const YourPokemonStack = createNativeStackNavigator();
 const PokemonLibraryStack = createNativeStackNavigator();
 const GetPokemonStack = createNativeStackNavigator();
+const AuthenticationStack = createNativeStackNavigator();
+const AppStack = createNativeStackNavigator();
+
+const Tab = createBottomTabNavigator();
 
 const YourPokemonStackScreens = () => (
   <YourPokemonStack.Navigator>
@@ -30,9 +38,7 @@ const GetPokemonStackScreens = () => (
   </GetPokemonStack.Navigator>
 );
 
-const Tab = createBottomTabNavigator();
-
-export const Main = () => (
+const MainStackScreens = () => (
   <Tab.Navigator screenOptions={{ headerShown: false }}>
     <Tab.Screen
       name="YourPokemonStack"
@@ -51,3 +57,31 @@ export const Main = () => (
     />
   </Tab.Navigator>
 );
+
+const AuthenticationStackScreens = () => (
+  <AuthenticationStack.Navigator>
+    <AuthenticationStack.Screen name="Login" component={Login} />
+  </AuthenticationStack.Navigator>
+);
+
+const isLogin = false;
+
+export const Routes = () => {
+  const {state} = useContext(AuthContext)
+  console.log(state)
+  return (
+    <AppStack.Navigator screenOptions={{ headerShown: false }}>
+      {state.user !== null ? (
+        <AppStack.Screen name="MainScreens" component={MainStackScreens} />
+      ) : (
+        <AppStack.Screen
+          name="AuthenticationScreens"
+          component={AuthenticationStackScreens}
+          options={{
+            animationTypeForReplace: state.isSignout ? 'pop' : 'push',
+          }}
+        />
+      )}
+    </AppStack.Navigator>
+  );
+};
