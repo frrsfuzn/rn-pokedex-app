@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   form: {
-    // backgroundColor: 'salmon'
+    width: 300,
   },
   button: {
     marginTop: 15,
