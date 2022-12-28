@@ -25,7 +25,7 @@ const Login = () => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Welcome to Pokedex!</Text>
+      <Text style={{fontFamily: "VT323", fontSize: 40, marginBottom: 30}}>Welcome to Pokedex!</Text>
       <View style={styles.form}>
         <CustomInput
           value={formQuery.email}

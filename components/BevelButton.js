@@ -1,13 +1,24 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 
-const BevelButton = ({ title, onPress, containerStyle, style, shadowStyle }) => {
+const BevelButton = ({
+  title,
+  onPress,
+  containerStyle,
+  style,
+  shadowStyle,
+}) => {
   return (
     <View style={containerStyle}>
-      <TouchableOpacity style={{...styles.button, ...style}} onPress={onPress}>
-        <Text style={{fontWeight: 'bold', color: 'white'}}>{title}</Text>
+      <TouchableOpacity
+        style={{ ...styles.button, ...style }}
+        onPress={onPress}
+      >
+        <Text style={{ color: "white", fontFamily: "VT323", fontSize: 20 }}>
+          {title}
+        </Text>
       </TouchableOpacity>
-      <View style={{...styles.shadow, ...shadowStyle}} />
+      <View style={{ ...styles.shadow, ...shadowStyle }} />
     </View>
   );
 };
