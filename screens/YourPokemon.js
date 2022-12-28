@@ -50,7 +50,6 @@ function YourPokemon({ navigation }) {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ height: 200, backgroundColor: "white" }}>
         <Text>Hi, {state.user.name}!</Text>
-        <Button title="SignOut" onPress={signOut}/>
         <Text>Pokemon's Twitter</Text>
         <WebView
           source={{

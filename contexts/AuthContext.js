@@ -75,7 +75,6 @@ const AuthContextProvider = (props) => {
 
     const checkLoggedUser = async () => {
       const loggedUser = await getLoggedUser();
-      console.log("loggedUser", loggedUser);
       if (loggedUser) {
         const user = JSON.parse(loggedUser);
         dispatch({ type: "RESTORE_USER", user });
@@ -87,8 +86,6 @@ const AuthContextProvider = (props) => {
 
   const authContext = {
     signIn: async (email, password) => {
-      console.log("signIn");
-
       try {
         dispatch({ type: "ON_SIGN_IN" });
         if (email === "" || password === "") {
@@ -120,8 +117,6 @@ const AuthContextProvider = (props) => {
       }
     },
     signUp: async (name, email, password) => {
-      console.log("signUp");
-
       try {
         dispatch({ type: "ON_SIGN_IN" });
         if (name === "" || email === "" || password === "") {
@@ -155,7 +150,7 @@ const AuthContextProvider = (props) => {
           }
         }
       } catch (e) {
-        console.log("error while signin", e);
+        console.log("error while signup", e);
       }
     },
     signOut: async () => {

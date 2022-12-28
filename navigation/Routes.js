@@ -11,11 +11,13 @@ import YourPokemon from "../screens/YourPokemon";
 import Login from "../screens/Login";
 import Register from "../screens/Register";
 import LoadingSplash from "../screens/LoadingSplash";
+import Profile from "../screens/Profile";
 
 const YourPokemonStack = createNativeStackNavigator();
 const PokemonLibraryStack = createNativeStackNavigator();
 const GetPokemonStack = createNativeStackNavigator();
 const AuthenticationStack = createNativeStackNavigator();
+const ProfileStack = createNativeStackNavigator();
 const AppStack = createNativeStackNavigator();
 
 const Tab = createBottomTabNavigator();
@@ -40,6 +42,12 @@ const GetPokemonStackScreens = () => (
   </GetPokemonStack.Navigator>
 );
 
+const ProfileStackScreens = () => (
+  <ProfileStack.Navigator>
+    <ProfileStack.Screen name="Profile" component={Profile} />
+  </ProfileStack.Navigator>
+);
+
 const MainStackScreens = () => (
   <Tab.Navigator screenOptions={{ headerShown: false }}>
     <Tab.Screen
@@ -57,6 +65,11 @@ const MainStackScreens = () => (
       component={GetPokemonStackScreens}
       options={{ tabBarLabel: "Get Your Pokemon" }}
     />
+    <Tab.Screen
+      name="ProfileStack"
+      component={ProfileStackScreens}
+      options={{ tabBarLabel: "Profile" }}
+    />
   </Tab.Navigator>
 );
 
@@ -67,11 +80,8 @@ const AuthenticationStackScreens = () => (
   </AuthenticationStack.Navigator>
 );
 
-const isLogin = false;
-
 export const Routes = () => {
   const { state } = useContext(AuthContext);
-  console.log(state);
   return (
     <AppStack.Navigator screenOptions={{ headerShown: false }}>
       {state.isLoading ? (
