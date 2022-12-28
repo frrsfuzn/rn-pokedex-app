@@ -11,6 +11,13 @@ const authReducer = (prevState, action) => {
         isLoading: false,
         user: action.user,
       };
+    case "IDLE":
+      return {
+        isLoading: false,
+        isSignout: false,
+        user: null,
+        error: null,
+      };
     case "ON_SIGN_IN":
       return {
         ...prevState,
@@ -75,9 +82,12 @@ const AuthContextProvider = (props) => {
 
     const checkLoggedUser = async () => {
       const loggedUser = await getLoggedUser();
+      console.log(loggedUser);
       if (loggedUser) {
         const user = JSON.parse(loggedUser);
         dispatch({ type: "RESTORE_USER", user });
+      } else {
+        dispatch({ type: "IDLE" });
       }
     };
     saveDefinedUsers();

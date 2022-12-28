@@ -75,7 +75,7 @@ const MainStackScreens = () => (
 
 const AuthenticationStackScreens = () => (
   <AuthenticationStack.Navigator>
-    <AuthenticationStack.Screen name="Login" component={Login} />
+    <AuthenticationStack.Screen name="Login" component={Login} options={{headerShown: false}} />
     <AuthenticationStack.Screen name="Register" component={Register} />
   </AuthenticationStack.Navigator>
 );
