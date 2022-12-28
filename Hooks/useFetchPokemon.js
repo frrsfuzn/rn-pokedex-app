@@ -6,7 +6,7 @@ const fetchPokemon = async (name) => {
   return data;
 };
 
-const useFetchPokemon = (name) =>
-  useQuery([`pokemon-${name}`, name], () => fetchPokemon(name));
+const useFetchPokemon = (name, enabled=true) =>
+  useQuery({queryKey:[`pokemon-${name}`, name], queryFn: () => fetchPokemon(name), enabled});
 
 export default useFetchPokemon;
