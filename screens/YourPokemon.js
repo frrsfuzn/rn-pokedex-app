@@ -19,7 +19,9 @@ function YourPokemon({ navigation }) {
         .then((res) => {
           if (isActive && res) {
             const data = JSON.parse(res);
-            setMyPokemon(data[user.email]);
+            if (data[user.email]) {
+              setMyPokemon(data[user.email]);
+            }
           }
         })
         .catch((err) => console.log(err));
@@ -54,7 +56,9 @@ function YourPokemon({ navigation }) {
               ))}
             </ScrollView>
           ) : (
-            <Text style={styles.header1}>You don't have any pokemon, get one!</Text>
+            <Text style={styles.header1}>
+              You don't have any pokemon, get one!
+            </Text>
           )}
         </View>
       </View>
