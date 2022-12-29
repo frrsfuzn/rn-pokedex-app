@@ -1,9 +1,18 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
-import { Button, Text, View } from "react-native";
+import {
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import useFetchPokemon from "../hooks/useFetchPokemon";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../contexts/AuthContext";
+import pokemonBall from "../../assets/PokemonBall.png";
+import PokemonCard from "../components/PokemonCard";
 
 function GetPokemon() {
   const [pokemonNumber, setPokemonNumber] = useState(null);
@@ -50,23 +59,62 @@ function GetPokemon() {
     setPokemonNumber(random);
   };
   return (
-    <View>
-      {pokemonNumber ? (
-        isLoading ? (
-          <Text>Loading...</Text>
-        ) : (
-          <View>
-            <Text>You get a pokemon!</Text>
-            <Text>Name: {data.name}</Text>
-            <Text>Weight: {data.weight}</Text>
-          </View>
-        )
-      ) : (
-        <Text>Get Your Pokemon Now!</Text>
-      )}
-      <Button title="Get Random Pokemon!" onPress={handleGetRandomPokemon} />
+    <View style={styles.container}>
+      <View style={styles.wrapper}>
+        <View style={styles.resultContainer}>
+          {pokemonNumber ? (
+            isLoading ? (
+              <Text>Loading...</Text>
+            ) : (
+              <View>
+                <Text>You get a pokemon!</Text>
+                <PokemonCard pokemonName={data.name} />
+              </View>
+            )
+          ) : (
+            <Text style={styles.questionMark}>?</Text>
+          )}
+        </View>
+        <View style={styles.catchButtonContainer}>
+          <TouchableOpacity onPress={handleGetRandomPokemon}>
+            <Image source={pokemonBall} style={{ width: 100, height: 100 }} />
+          </TouchableOpacity>
+          <Text style={styles.header1}>Tap to get random pokemon!</Text>
+        </View>
+      </View>
     </View>
   );
 }
 
 export default GetPokemon;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  wrapper: {
+    // backgroundColor: "salmon",
+    height: "80%",
+    justifyContent: "space-between",
+  },
+  catchButtonContainer: {
+    alignItems: "center",
+  },
+  resultContainer: {
+    alignItems: "center",
+  },
+  header1:{
+    fontFamily: "VT323",
+    color: "black",
+    fontSize: 30,
+  },
+  questionMark: {
+    fontFamily: "VT323",
+    color: "black",
+    fontSize: 200,
+    lineHeight: 200
+  }
+});
