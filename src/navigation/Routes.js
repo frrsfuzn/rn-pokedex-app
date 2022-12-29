@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 import { useContext } from "react";
 
 import { AuthContext } from "../contexts/AuthContext";
@@ -19,9 +20,9 @@ import getPokemonIcon from "../../assets/GetPokemonIcon.png";
 import profileIcon from "../../assets/ProfileIcon.png";
 import { Image } from "react-native";
 
-const YourPokemonStack = createNativeStackNavigator();
-const PokemonLibraryStack = createNativeStackNavigator();
-const GetPokemonStack = createNativeStackNavigator();
+const YourPokemonStack = createSharedElementStackNavigator();
+const PokemonLibraryStack = createSharedElementStackNavigator();
+const GetPokemonStack = createSharedElementStackNavigator();
 const AuthenticationStack = createNativeStackNavigator();
 const ProfileStack = createNativeStackNavigator();
 const AppStack = createNativeStackNavigator();
@@ -43,6 +44,10 @@ const YourPokemonStackScreens = () => (
         headerTitleStyle: { fontFamily: "VT323", fontSize: 30 },
       }}
       component={PokemonDetails}
+      sharedElements={(route, otherRoute, showing) => {
+        const { name } = route.params;
+        return [`pokemon.${name}.photo`];
+      }}
     />
   </YourPokemonStack.Navigator>
 );
@@ -66,6 +71,10 @@ const PokemonLibraryStackScreens = () => (
         headerTitleStyle: { fontFamily: "VT323", fontSize: 30 },
       }}
       component={PokemonDetails}
+      sharedElements={(route, otherRoute, showing) => {
+        const { name } = route.params;
+        return [`pokemon.${name}.photo`];
+      }}
     />
   </PokemonLibraryStack.Navigator>
 );
@@ -90,6 +99,10 @@ const GetPokemonStackScreens = () => (
       }}
       name="Details"
       component={PokemonDetails}
+      sharedElements={(route, otherRoute, showing) => {
+        const { name } = route.params;
+        return [`pokemon.${name}.photo`];
+      }}
     />
   </GetPokemonStack.Navigator>
 );

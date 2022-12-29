@@ -6,6 +6,7 @@ import TypePil from "./TypePil";
 import { LinearGradient } from "expo-linear-gradient";
 import { mapTypeToColor } from "../utils/colors";
 import whitePokemonBall from "../../assets/WhitePokemonBall.png";
+import { SharedElement } from "react-navigation-shared-element";
 
 const PokemonCard = ({ pokemonName }) => {
   const { data, isLoading, isError } = useFetchPokemon(pokemonName);
@@ -45,11 +46,12 @@ const PokemonCard = ({ pokemonName }) => {
             <TypePil key={type.type.name} name={type.type.name} />
           ))}
         </View>
-
-        <Image
-          source={{ uri: data.sprites.other.home.front_default }}
-          style={styles.image}
-        />
+        <SharedElement style={styles.sharedElement} id={`pokemon.${data.name}.photo`}>
+          <Image
+            style={styles.image}
+            source={{ uri: data.sprites.other.home.front_default }}
+          />
+        </SharedElement>
         <View style={styles.whitePokemonBallContainer}>
           <Image source={whitePokemonBall} style={styles.whitePokemonBall} />
         </View>
@@ -77,15 +79,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     left: 0,
-    overflow: 'hidden'
+    overflow: "hidden",
   },
   whitePokemonBall: {
     width: 100,
     height: 100,
-    position: 'absolute',
-    right:-20,
+    position: "absolute",
+    right: -20,
     top: -20,
-    opacity: 0.5
+    opacity: 0.5,
   },
   text: {
     fontFamily: "VT323",
@@ -96,11 +98,13 @@ const styles = StyleSheet.create({
   image: {
     width: 75,
     height: 75,
+  },
+  sharedElement: {
     position: "absolute",
     right: 0,
     top: -40,
     zIndex: 5,
-    elevation: 5
+    elevation: 5,
   },
   types: {
     flexDirection: "row",

@@ -50,6 +50,16 @@ const Profile = () => {
         style={{ backgroundColor: "#EB455F" }}
         shadowStyle={{ backgroundColor: "#962E3E" }}
       />
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}
+      >
+        <Text>Made with ❤️ </Text>
+        <Text>by Mochamad Farras Fauzan</Text>
+      </View>
     </View>
   );
 };

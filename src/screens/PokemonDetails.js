@@ -7,7 +7,8 @@ import StatsList from "../components/StatsList";
 import InfoList from "../components/InfoList";
 import { LinearGradient } from "expo-linear-gradient";
 import { mapTypeToColor } from "../utils/colors";
-import whitePokemonBall from "../../assets/WhitePokemonBall.png"
+import whitePokemonBall from "../../assets/WhitePokemonBall.png";
+import { SharedElement } from "react-navigation-shared-element";
 
 function Details({ route }) {
   const { name } = route.params;
@@ -52,10 +53,15 @@ function Details({ route }) {
           </View>
           <Text style={styles.id}>#{data.id}</Text>
         </View>
-        <Image
-          style={styles.image}
-          source={{ uri: data.sprites.other.home.front_default }}
-        />
+        <SharedElement
+          style={styles.sharedElement}
+          id={`pokemon.${data.name}.photo`}
+        >
+          <Image
+            style={styles.image}
+            source={{ uri: data.sprites.other.home.front_default }}
+          />
+        </SharedElement>
         <View style={styles.bottomBar} />
         <Image source={whitePokemonBall} style={styles.whitePokemonBall} />
       </LinearGradient>
@@ -86,9 +92,9 @@ const styles = StyleSheet.create({
   whitePokemonBall: {
     width: 200,
     height: 200,
-    position: 'absolute',
+    position: "absolute",
     opacity: 0.7,
-    bottom: -20
+    bottom: -20,
   },
   infoHeader: {
     width: "100%",
@@ -124,6 +130,8 @@ const styles = StyleSheet.create({
   image: {
     width: 160,
     height: 160,
+  },
+  sharedElement: {
     position: "absolute",
     bottom: 0,
     zIndex: 1,
