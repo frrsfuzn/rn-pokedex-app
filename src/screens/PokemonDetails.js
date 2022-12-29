@@ -5,6 +5,9 @@ import TypePil from "../components/TypePil";
 import MovesList from "../components/MovesList";
 import StatsList from "../components/StatsList";
 import InfoList from "../components/InfoList";
+import { LinearGradient } from "expo-linear-gradient";
+import { mapTypeToColor } from "../utils/colors";
+import whitePokemonBall from "../../assets/WhitePokemonBall.png"
 
 function Details({ route }) {
   const { name } = route.params;
@@ -23,9 +26,21 @@ function Details({ route }) {
       </View>
     );
   }
+  const colorGradient =
+    data.types.length > 1
+      ? data.types.map((type) => mapTypeToColor(type.type.name))
+      : [
+          mapTypeToColor(data.types[0].type.name),
+          mapTypeToColor(data.types[0].type.name),
+        ];
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.imageContainer}>
+      <LinearGradient
+        colors={colorGradient}
+        start={{ x: 0.0, y: 0.0 }}
+        end={{ x: 1.0, y: 1.0 }}
+        style={styles.imageContainer}
+      >
         <View style={styles.infoHeader}>
           <View>
             <Text style={styles.name}>{data.name}</Text>
@@ -42,7 +57,8 @@ function Details({ route }) {
           source={{ uri: data.sprites.other.home.front_default }}
         />
         <View style={styles.bottomBar} />
-      </View>
+        <Image source={whitePokemonBall} style={styles.whitePokemonBall} />
+      </LinearGradient>
       <View style={styles.infoContainer}>
         <Text style={styles.header1}>Details</Text>
         <InfoList data={data} />
@@ -63,10 +79,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageContainer: {
-    backgroundColor: "#A2D7C7",
     justifyContent: "center",
     flexDirection: "row",
     height: 230,
+  },
+  whitePokemonBall: {
+    width: 200,
+    height: 200,
+    position: 'absolute',
+    opacity: 0.7,
+    bottom: -20
   },
   infoHeader: {
     width: "100%",

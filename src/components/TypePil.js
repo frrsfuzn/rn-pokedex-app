@@ -12,6 +12,16 @@ const TypePil = ({ name }) => {
 export default TypePil;
 
 const styles = StyleSheet.create({
-  container: { padding: 5, backgroundColor: "salmon", borderRadius: 10, marginRight: 5 },
-  text: { fontFamily: "VT323", lineHeight: 12, letterSpacing:1, color: 'white'},
+  container: {
+    padding: 5,
+    backgroundColor: "#474E68",
+    borderRadius: 10,
+    marginRight: 5,
+  },
+  text: {
+    fontFamily: "VT323",
+    lineHeight: 12,
+    letterSpacing: 1,
+    color: "white",
+  },
 });
