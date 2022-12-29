@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import PokemonCard from "../components/PokemonCard";
 
 function Home({ navigation }) {
   const {
@@ -19,13 +20,14 @@ function Home({ navigation }) {
   } = useFetchAllPokemon();
   const pokemonItem = ({ item }) => {
     return (
-      <TouchableOpacity
-        onPress={() => navigation.push("Details", { name: item.name })}
-        key={item.name}
-        style={styles.pokemon}
-      >
-        <Text>{item.name}</Text>
-      </TouchableOpacity>
+      // <TouchableOpacity
+      //   onPress={() => navigation.push("Details", { name: item.name })}
+      //   key={item.name}
+      //   style={styles.pokemon}
+      // >
+      //   <Text>{item.name}</Text>
+      // </TouchableOpacity>
+      <PokemonCard pokemon={item}/>
     );
   };
 
@@ -44,12 +46,14 @@ function Home({ navigation }) {
       <FlatList
         data={data?.pages.map((page) => page.results).flat()}
         renderItem={pokemonItem}
+        columnWrapperStyle={{justifyContent: 'space-evenly'}}
         keyExtractor={(result) => result.name}
         style={styles.pokemonList}
         onEndReached={loadMore}
         ListFooterComponent={
           isFetchingNextPage ? <Text>Loading...</Text> : null
         }
+        numColumns={2}
       />
     </View>
   );

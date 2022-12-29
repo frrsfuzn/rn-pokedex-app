@@ -82,7 +82,6 @@ const AuthContextProvider = (props) => {
 
     const checkLoggedUser = async () => {
       const loggedUser = await getLoggedUser();
-      console.log(loggedUser);
       if (loggedUser) {
         const user = JSON.parse(loggedUser);
         dispatch({ type: "RESTORE_USER", user });
