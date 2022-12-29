@@ -48,6 +48,7 @@ function YourPokemon({ navigation }) {
           // solution from https://github.com/react-navigation/react-navigation/issues/10290#issuecomment-1328353073
           // somehow it fixed the crash if we add custom opacity
           style={{ opacity: 0.99 }}
+          scalesPageToFit={false}
         />
       </View>
       <View style={styles.pokemonListContainer}>
