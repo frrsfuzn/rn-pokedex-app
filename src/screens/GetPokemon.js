@@ -1,7 +1,12 @@
-import React, { useState, useCallback, useEffect, useContext } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useContext,
+  useRef,
+} from "react";
 import {
-  Button,
-  Image,
+  Animated,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -16,21 +21,30 @@ import PokemonCard from "../components/PokemonCard";
 
 function GetPokemon() {
   const [pokemonNumber, setPokemonNumber] = useState(null);
+  const [displayResult, setDisplayResult] = useState(false);
+  const [pokemonAlreadyExist, setPokemonAlreadyExist] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const rotateAnimation = useRef(new Animated.Value(0)).current;
   const { getUser } = useContext(AuthContext);
   const user = getUser();
   const { data, isLoading } = useFetchPokemon(pokemonNumber, !!pokemonNumber);
   const { getItem, setItem } = useAsyncStorage("myPokemon");
+
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
       if (isActive) {
         setPokemonNumber(null);
+        setDisplayResult(false);
+        setPokemonAlreadyExist(false);
+        setButtonDisabled(false)
       }
       return () => {
         isActive = false;
       };
     }, [])
   );
+
   useEffect(() => {
     const savePokemon = async (pokemonName) => {
       let myPokemon = await getItem();
@@ -38,6 +52,17 @@ function GetPokemon() {
         myPokemon = JSON.parse(myPokemon);
         const newData = { name: pokemonName };
         if (myPokemon[user.email]) {
+          let exist = false;
+          for (const pokemon of myPokemon[user.email]) {
+            if (pokemon.name === pokemonName) {
+              exist = true;
+              break;
+            }
+          }
+          if (exist) {
+            setPokemonAlreadyExist(true);
+            return;
+          }
           myPokemon[user.email].push(newData);
         } else {
           myPokemon = { ...myPokemon, [user.email]: [{ name: pokemonName }] };
@@ -54,30 +79,80 @@ function GetPokemon() {
       savePokemon(data.name);
     }
   }, [isLoading, pokemonNumber]);
+
+  useEffect(() => {
+    if (!isLoading && pokemonNumber) {
+      const timer = setTimeout(() => {
+        rotateAnimation.stopAnimation();
+        setDisplayResult(true);
+        setButtonDisabled(false);
+      }, 2000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [isLoading, pokemonNumber]);
+
+  const rotatePokemonBall = () => {
+    Animated.timing(rotateAnimation, {
+      toValue: 1,
+      duration: 800,
+      useNativeDriver: true,
+    }).start((o) => {
+      rotateAnimation.setValue(0);
+      if (o.finished) {
+        rotatePokemonBall();
+      }
+    });
+  };
+
   const handleGetRandomPokemon = () => {
+    setDisplayResult(false);
+    rotatePokemonBall();
     const random = Math.floor(Math.random() * 800);
     setPokemonNumber(random);
+    setButtonDisabled(true);
   };
+
+  const interpolateRotating = rotateAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "720deg"],
+  });
+
+  const animatedStyle = {
+    transform: [
+      {
+        rotate: interpolateRotating,
+      },
+    ],
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.resultContainer}>
-          {pokemonNumber ? (
-            isLoading ? (
-              <Text>Loading...</Text>
-            ) : (
-              <View>
-                <Text>You get a pokemon!</Text>
-                <PokemonCard pokemonName={data.name} />
-              </View>
-            )
+          {pokemonNumber && data && displayResult ? (
+            <>
+              <Text style={styles.header1}>
+                {pokemonAlreadyExist
+                  ? "You get an existed Pokemon!"
+                  : "You get a new pokemon!"}
+              </Text>
+              <PokemonCard pokemonName={data.name} />
+            </>
           ) : (
             <Text style={styles.questionMark}>?</Text>
           )}
         </View>
         <View style={styles.catchButtonContainer}>
-          <TouchableOpacity onPress={handleGetRandomPokemon}>
-            <Image source={pokemonBall} style={{ width: 100, height: 100 }} />
+          <TouchableOpacity
+            disabled={buttonDisabled}
+            onPress={handleGetRandomPokemon}
+          >
+            <Animated.Image
+              source={pokemonBall}
+              style={{ width: 100, height: 100, ...animatedStyle }}
+            />
           </TouchableOpacity>
           <Text style={styles.header1}>Tap to get random pokemon!</Text>
         </View>
@@ -96,7 +171,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   wrapper: {
-    // backgroundColor: "salmon",
     height: "80%",
     justifyContent: "space-between",
   },
@@ -106,7 +180,7 @@ const styles = StyleSheet.create({
   resultContainer: {
     alignItems: "center",
   },
-  header1:{
+  header1: {
     fontFamily: "VT323",
     color: "black",
     fontSize: 30,
@@ -115,6 +189,6 @@ const styles = StyleSheet.create({
     fontFamily: "VT323",
     color: "black",
     fontSize: 200,
-    lineHeight: 200
-  }
+    lineHeight: 200,
+  },
 });

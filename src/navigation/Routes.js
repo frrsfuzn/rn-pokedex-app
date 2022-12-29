@@ -51,6 +51,7 @@ const PokemonLibraryStackScreens = () => (
 const GetPokemonStackScreens = () => (
   <GetPokemonStack.Navigator>
     <GetPokemonStack.Screen name="GetPokemon" component={GetPokemon} />
+    <GetPokemonStack.Screen name="Details" component={PokemonDetails} />
   </GetPokemonStack.Navigator>
 );
 
