@@ -4,9 +4,8 @@ import useFetchPokemon from "../hooks/useFetchPokemon";
 import { useNavigation } from "@react-navigation/native";
 import TypePil from "./TypePil";
 
-const PokemonCard = ({ pokemon }) => {
-  console.log(pokemon);
-  const { data, isLoading, isError } = useFetchPokemon(pokemon.name);
+const PokemonCard = ({ pokemonName }) => {
+  const { data, isLoading, isError } = useFetchPokemon(pokemonName);
   const navigation = useNavigation();
 
   if (isLoading) {
@@ -27,7 +26,7 @@ const PokemonCard = ({ pokemon }) => {
       <Text style={styles.text}>type:</Text>
       <View style={styles.types}>
         {data.types.map((type) => (
-          <TypePil name={type.type.name} />
+          <TypePil key={type.type.name} name={type.type.name} />
         ))}
       </View>
 
@@ -46,7 +45,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#A2D7C7",
     width: 150,
     height: 105,
-    // marginBottom: 20,
     marginTop: 40,
     paddingHorizontal: 13,
     paddingVertical: 8,

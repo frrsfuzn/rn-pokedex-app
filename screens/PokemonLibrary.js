@@ -20,14 +20,7 @@ function Home({ navigation }) {
   } = useFetchAllPokemon();
   const pokemonItem = ({ item }) => {
     return (
-      // <TouchableOpacity
-      //   onPress={() => navigation.push("Details", { name: item.name })}
-      //   key={item.name}
-      //   style={styles.pokemon}
-      // >
-      //   <Text>{item.name}</Text>
-      // </TouchableOpacity>
-      <PokemonCard pokemon={item}/>
+      <PokemonCard pokemonName={item.name}/>
     );
   };
 
