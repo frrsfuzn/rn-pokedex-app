@@ -50,8 +50,8 @@ function YourPokemon({ navigation }) {
             <ScrollView horizontal style={styles.pokemonList}>
               <View style={{ width: 10 }} />
               {myPokemon.map((pokemon) => (
-                <View style={{ marginRight: 10 }}>
-                  <PokemonCard key={pokemon.name} pokemonName={pokemon.name} />
+                <View key={pokemon.name} style={{ marginRight: 10 }}>
+                  <PokemonCard pokemonName={pokemon.name} />
                 </View>
               ))}
             </ScrollView>
