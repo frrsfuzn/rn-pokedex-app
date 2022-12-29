@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AuthContextProvider from "./contexts/AuthContext";
+import AuthContextProvider from "./src/contexts/AuthContext";
 
 import { useFonts } from "expo-font";
-import { Routes } from "./navigation/Routes";
+import { Routes } from "./src/navigation/Routes";
 
 const queryClient = new QueryClient();
 
