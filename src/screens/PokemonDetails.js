@@ -9,6 +9,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { mapTypeToColor } from "../utils/colors";
 import whitePokemonBall from "../../assets/WhitePokemonBall.png";
 import { SharedElement } from "react-navigation-shared-element";
+import * as Animatable from "react-native-animatable";
 
 function Details({ route }) {
   const { name } = route.params;
@@ -44,14 +45,16 @@ function Details({ route }) {
       >
         <View style={styles.infoHeader}>
           <View>
-            <Text style={styles.name}>{data.name}</Text>
-            <View style={styles.types}>
+            <Animatable.Text animation="fadeInLeft" style={styles.name}>
+              {data.name}
+            </Animatable.Text>
+            <Animatable.View animation="fadeInLeft" style={styles.types}>
               {data.types.map((type) => (
                 <TypePil key={type.type.name} name={type.type.name} />
               ))}
-            </View>
+            </Animatable.View>
           </View>
-          <Text style={styles.id}>#{data.id}</Text>
+          <Animatable.Text animation="fadeInRight" style={styles.id}>#{data.id}</Animatable.Text>
         </View>
         <SharedElement
           style={styles.sharedElement}
@@ -66,10 +69,14 @@ function Details({ route }) {
         <Image source={whitePokemonBall} style={styles.whitePokemonBall} />
       </LinearGradient>
       <View style={styles.infoContainer}>
-        <Text style={styles.header1}>Details</Text>
-        <InfoList data={data} />
-        <Text style={styles.header1}>Stats</Text>
-        <StatsList stats={data.stats} />
+        <Animatable.View animation="fadeInUp">
+          <Text style={styles.header1}>Details</Text>
+          <InfoList data={data} />
+        </Animatable.View>
+        <Animatable.View animation="fadeInUp">
+          <Text style={styles.header1}>Stats</Text>
+          <StatsList stats={data.stats} />
+        </Animatable.View>
         <Text style={styles.header1}>Moves ({data.moves.length})</Text>
         <MovesList moves={data.moves} />
       </View>
