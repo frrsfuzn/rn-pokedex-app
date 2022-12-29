@@ -20,11 +20,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     marginTop: 10,
+    justifyContent: 'space-evenly',
   },
   move: {
     width: "45%",
     backgroundColor: "#0E5E6F",
-    marginRight: 10,
     marginBottom: 10,
     padding: 10,
     borderRadius: 10,
