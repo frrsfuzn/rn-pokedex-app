@@ -9,13 +9,13 @@ import whitePokemonBall from "../../assets/WhitePokemonBall.png";
 import { SharedElement } from "react-navigation-shared-element";
 
 const PokemonCard = ({ pokemonName }) => {
-  const { data, isLoading, isError } = useFetchPokemon(pokemonName);
+  const { data, isLoading } = useFetchPokemon(pokemonName);
   const navigation = useNavigation();
 
   if (isLoading) {
     return (
-      <View style={styles.container}>
-        <Text>Loading</Text>
+      <View style={styles.containerPlaceholder}>
+        <Text>Loading...</Text>
       </View>
     );
   }
@@ -46,7 +46,10 @@ const PokemonCard = ({ pokemonName }) => {
             <TypePil key={type.type.name} name={type.type.name} />
           ))}
         </View>
-        <SharedElement style={styles.sharedElement} id={`pokemon.${data.name}.photo`}>
+        <SharedElement
+          style={styles.sharedElement}
+          id={`pokemon.${data.name}.photo`}
+        >
           <Image
             style={styles.image}
             source={{ uri: data.sprites.other.home.front_default }}
@@ -63,6 +66,18 @@ const PokemonCard = ({ pokemonName }) => {
 export default PokemonCard;
 
 const styles = StyleSheet.create({
+  containerPlaceholder: {
+    backgroundColor: "#eee",
+    width: 150,
+    height: 105,
+    marginTop: 40,
+    paddingHorizontal: 13,
+    paddingVertical: 8,
+    elevation: 1,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   container: {
     width: 150,
     height: 105,
