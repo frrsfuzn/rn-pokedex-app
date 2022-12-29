@@ -1,13 +1,10 @@
 import {
   View,
   Text,
-  Button,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
   StatusBar,
-  Pressable,
 } from "react-native";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";

@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   wrapper: {
-    height: "80%",
+    height: "70%",
     justifyContent: "space-between",
   },
   catchButtonContainer: {

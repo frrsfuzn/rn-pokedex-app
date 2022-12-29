@@ -1,5 +1,12 @@
 import React, { useCallback, useContext, useState } from "react";
-import { View, Text, SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  StatusBar,
+} from "react-native";
 import { WebView } from "react-native-webview";
 import { useFocusEffect } from "@react-navigation/native";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
@@ -31,7 +38,7 @@ function YourPokemon({ navigation }) {
     }, [])
   );
   return (
-    <SafeAreaView style={{ height: "100%", backgroundColor: "white" }}>
+    <SafeAreaView style={styles.container}>
       <View style={{ flex: 3, backgroundColor: "white" }}>
         <Text style={styles.header1}>Latest News from Pokemon</Text>
         <WebView
@@ -43,7 +50,7 @@ function YourPokemon({ navigation }) {
           style={{ opacity: 0.99 }}
         />
       </View>
-      <View style={{ flex: 2, justifyContent: "center" }}>
+      <View style={styles.pokemonListContainer}>
         <Text style={styles.header1}>Your Pokemon</Text>
         <View>
           {myPokemon.length ? (
@@ -70,10 +77,14 @@ export default YourPokemon;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    height: "100%",
+    marginTop: StatusBar.currentHeight,
+    backgroundColor: "white",
+  },
+  pokemonListContainer: {
+    flex: 2,
+    justifyContent: "flex-start",
+    marginTop: 10,
   },
   pokemonList: {
     paddingBottom: 10,
