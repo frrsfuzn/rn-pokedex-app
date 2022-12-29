@@ -1,56 +1,37 @@
 import React, { useCallback, useContext, useState } from "react";
-import {
-  View,
-  Text,
-  SafeAreaView,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  Button,
-} from "react-native";
+import { View, Text, SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { WebView } from "react-native-webview";
 import { useFocusEffect } from "@react-navigation/native";
-import {useAsyncStorage} from "@react-native-async-storage/async-storage";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../contexts/AuthContext";
+import PokemonCard from "../components/PokemonCard";
 
 function YourPokemon({ navigation }) {
   const [myPokemon, setMyPokemon] = useState([]);
-  const {signOut, state, getUser} = useContext(AuthContext);
+  const { getUser } = useContext(AuthContext);
   const user = getUser();
-  const {getItem} = useAsyncStorage("myPokemon")
+  const { getItem } = useAsyncStorage("myPokemon");
 
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
       getItem()
-      .then(res => {
-        if(isActive && res){
-          const data = JSON.parse(res)
-          setMyPokemon(data[user.email])
-        }
-      })
-      .catch(err => console.log(err))
+        .then((res) => {
+          if (isActive && res) {
+            const data = JSON.parse(res);
+            setMyPokemon(data[user.email]);
+          }
+        })
+        .catch((err) => console.log(err));
       return () => {
         isActive = false;
       };
     }, [])
   );
-  const pokemonItem = ({ item }) => {
-    return (
-      <TouchableOpacity
-        onPress={() => navigation.push("Details", { name: item.name })}
-        key={item.name}
-        style={styles.pokemon}
-      >
-        <Text>{item.name}</Text>
-      </TouchableOpacity>
-    );
-  };
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ height: 200, backgroundColor: "white" }}>
-        <Text>Hi, {state.user.name}!</Text>
-        <Text>Pokemon's Twitter</Text>
+    <SafeAreaView style={{ height: "100%", backgroundColor: "white" }}>
+      <View style={{ flex: 3, backgroundColor: "white" }}>
+        <Text style={styles.header1}>Latest News from Pokemon</Text>
         <WebView
           source={{
             html: '<a class="twitter-timeline" href="https://twitter.com/Pokemon?ref_src=twsrc%5Etfw">Tweets by Pokemon</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> ',
@@ -60,14 +41,22 @@ function YourPokemon({ navigation }) {
           style={{ opacity: 0.99 }}
         />
       </View>
-      <View>
-        <Text>Your Pokemon</Text>
-        <FlatList
-          data={myPokemon}
-          renderItem={pokemonItem}
-          keyExtractor={(result) => result.name}
-          style={styles.pokemonList}
-        />
+      <View style={{ flex: 2, justifyContent: "center" }}>
+        <Text style={styles.header1}>Your Pokemon</Text>
+        <View>
+          {myPokemon.length ? (
+            <ScrollView horizontal style={styles.pokemonList}>
+              <View style={{ width: 10 }} />
+              {myPokemon.map((pokemon) => (
+                <View style={{ marginRight: 10 }}>
+                  <PokemonCard key={pokemon.name} pokemonName={pokemon.name} />
+                </View>
+              ))}
+            </ScrollView>
+          ) : (
+            <Text style={styles.header1}>You don't have any pokemon, get one!</Text>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -83,7 +72,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   pokemonList: {
-    width: "100%",
+    paddingBottom: 10,
+  },
+  header1: {
+    fontFamily: "VT323",
+    color: "black",
+    fontSize: 30,
+    marginBottom: 10,
+    textAlign: "center",
   },
   pokemon: {
     backgroundColor: "#afa",

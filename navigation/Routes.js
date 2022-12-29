@@ -24,14 +24,26 @@ const Tab = createBottomTabNavigator();
 
 const YourPokemonStackScreens = () => (
   <YourPokemonStack.Navigator>
-    <YourPokemonStack.Screen name="YourPokemon" component={YourPokemon} />
-    <YourPokemonStack.Screen name="Details" component={PokemonDetails} />
+    <YourPokemonStack.Screen
+      name="YourPokemon"
+      options={{ headerTitle: "Your Pokemon" }}
+      component={YourPokemon}
+    />
+    <YourPokemonStack.Screen
+      name="Details"
+      options={{ headerTitle: "Details" }}
+      component={PokemonDetails}
+    />
   </YourPokemonStack.Navigator>
 );
 
 const PokemonLibraryStackScreens = () => (
   <PokemonLibraryStack.Navigator>
-    <PokemonLibraryStack.Screen name="Home" component={PokemonLibrary} />
+    <PokemonLibraryStack.Screen
+      name="PokemonLibrary"
+      options={{ headerTitle: "Pokemon Library" }}
+      component={PokemonLibrary}
+    />
     <PokemonLibraryStack.Screen name="Details" component={PokemonDetails} />
   </PokemonLibraryStack.Navigator>
 );
@@ -75,7 +87,11 @@ const MainStackScreens = () => (
 
 const AuthenticationStackScreens = () => (
   <AuthenticationStack.Navigator>
-    <AuthenticationStack.Screen name="Login" component={Login} options={{headerShown: false}} />
+    <AuthenticationStack.Screen
+      name="Login"
+      component={Login}
+      options={{ headerShown: false }}
+    />
     <AuthenticationStack.Screen name="Register" component={Register} />
   </AuthenticationStack.Navigator>
 );
