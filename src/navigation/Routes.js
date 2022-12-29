@@ -22,7 +22,7 @@ import { Image } from "react-native";
 
 const YourPokemonStack = createSharedElementStackNavigator();
 const PokemonLibraryStack = createSharedElementStackNavigator();
-const GetPokemonStack = createSharedElementStackNavigator();
+const GetPokemonStack = createNativeStackNavigator();
 const AuthenticationStack = createNativeStackNavigator();
 const ProfileStack = createNativeStackNavigator();
 const AppStack = createNativeStackNavigator();
@@ -99,10 +99,6 @@ const GetPokemonStackScreens = () => (
       }}
       name="Details"
       component={PokemonDetails}
-      sharedElements={(route, otherRoute, showing) => {
-        const { name } = route.params;
-        return [`pokemon.${name}.photo`];
-      }}
     />
   </GetPokemonStack.Navigator>
 );
