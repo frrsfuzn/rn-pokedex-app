@@ -18,7 +18,8 @@
 
 
 ### Catch random pokemon
-![Pokedex - Catch random pokemon](https://user-images.githubusercontent.com/40857427/210030587-03b43532-840e-47bd-95e9-f9137cc83a35.gif)
+![Pokedex - new catch](https://user-images.githubusercontent.com/40857427/210034877-055c9471-6d81-442a-8a94-faecdcc127d8.gif)
+
 
 ### Display latest tweet from Pokemon twitter account
 ![Pokedex - Pokemon Twitter Timeline](https://user-images.githubusercontent.com/40857427/210030567-13fd2fde-cafc-4750-b8ec-6ff79c7dd579.gif)
